@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bar TOP - Cardápio Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cor-principal: #1d1e22;
+            --cor-secundaria: #ffc700;
+            --cor-terciaria: #2a2b32;
+            --cor-botao: #ffc700;
+            --cor-botao-hover: #ffae00;
+            --cor-fundo: #23232b;
+            --cor-texto: #fff;
+            --radius: 18px;
+            --sombra: 0 2px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cor-fundo);
+            color: var(--cor-texto);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--cor-principal);
+            text-align: center;
+            padding: 30px 0 20px 0;
+            box-shadow: var(--sombra);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--cor-secundaria);
+            margin-bottom: 5px;
+        }
+
+        nav {
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            padding: 12px 22px;
+            border: none;
+            background: var(--cor-botao);
+            color: var(--cor-principal);
+            border-radius: var(--radius);
+            font-weight: bold;
+            font-size: 1.06rem;
+            cursor: pointer;
+            transition: background .2s;
+            box-shadow: var(--sombra);
+        }
+
+        nav button.active,
+        nav button:hover {
+            background: var(--cor-botao-hover);
+            color: var(--cor-principal);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 28px auto 0 auto;
+            padding: 0 14px 36px 14px;
+            min-height: 300px;
+        }
+
+        .categoria-titulo {
+            font-size: 1.4rem;
+            color: var(--cor-secundaria);
+            margin: 24px 0 12px 6px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--cor-terciaria);
+            border-radius: var(--radius);
+            box-shadow: var(--sombra);
+            padding: 15px 12px 22px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform .18s;
+            min-height: 420px;
+        }
+
+        .card:hover {
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        .card img {
+            width: 100%;
+            max-width: 260px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            background: #fff2;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            display: block;
+        }
+
+        .card .nome {
+            font-size: 1.23rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--cor-secundaria);
+        }
+
+        .card .preco {
+            font-size: 1.13rem;
+            font-weight: 600;
+            margin: 2px 0 6px 0;
+        }
+
+        .card .preco-original {
+            text-decoration: line-through;
+            color: #ff8686;
+            font-size: 0.95em;
+            margin-right: 8px;
+        }
+
+        .card .descricao {
+            font-size: 0.97rem;
+            color: #ccc;
+            margin-bottom: 14px;
+            min-height: 38px;
+        }
+
+        .card button {
+            background: var(--cor-botao);
+            color: var(--cor-principal);
+            padding: 11px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            font-size: 1.08rem;
+            cursor: pointer;
+            transition: background .19s;
+            margin-top: auto;
+        }
+
+        .card button:hover {
+            background: var(--cor-botao-hover);
+        }
+
+        /* Pedido */
+        .pedido-lista {
+            margin-bottom: 20px;
+        }
+
+        .pedido-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #222;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+
+        .pedido-item .remove {
+            background: #ff3434;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: .97rem;
+            margin-left: 10px;
+        }
+
+        .pedido-form input,
+        .pedido-form textarea {
+            width: 100%;
+            padding: 9px;
+            margin: 8px 0 16px 0;
+            border-radius: 7px;
+            border: none;
+            background: #34344a;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .pedido-form label {
+            font-size: 1.03rem;
+            color: #ffc700;
+        }
+
+        .pedido-form button {
+            width: 100%;
+            background: var(--cor-botao);
+            color: var(--cor-principal);
+            padding: 13px 0;
+            font-size: 1.13rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background .19s;
+        }
+
+        .pedido-form button:hover {
+            background: var(--cor-botao-hover);
+        }
+
+        .pedido-total {
+            font-size: 1.17rem;
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: #ffc700;
+        }
+
+        /* Info */
+        .info {
+            padding: 18px;
+            background: #23232b;
+            border-radius: 13px;
+            box-shadow: var(--sombra);
+            color: #ffd500;
+            font-size: 1.07rem;
+            max-width: 700px;
+            margin: 32px auto 0 auto;
+            text-align: center;
+        }
+
+        @media (max-width: 850px) {
+            .card img {
+                max-width: 100%;
+                height: 180px;
+            }
+
+            .grid {
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .card {
+                padding: 10px 5px 18px 5px;
+            }
+
+            .grid {
+                gap: 7px;
+            }
+
+            .card img {
+                height: 140px;
+            }
+
+            .card {
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            main {
+                padding: 0 3px;
+            }
+
+            nav button {
+                font-size: 1rem;
+                padding: 10px 9px;
+            }
+
+            .info {
+                padding: 11px;
+                font-size: 1rem;
+            }
+
+            .card img {
+                height: 105px;
+            }
+
+            .card {
+                min-height: 170px;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Bar TOP 🍻</h1>
+        <nav>
+            <button class="active" id="btnCardapio" onclick="showSection('cardapio')">Cardápio</button>
+            <button id="btnPromos" onclick="showSection('promos')">Promoções</button>
+            <button id="btnPedido" onclick="showSection('pedido')">Ver Pedido</button>
+            <button id="btnInfo" onclick="showSection('info')">Informações</button>
+        </nav>
+    </header>
+    <main>
+        <!-- CARDÁPIO -->
+        <section id="secCardapio"></section>
+        <!-- PROMOÇÕES -->
+        <section id="secPromos" style="display:none"></section>
+        <!-- PEDIDO -->
+        <section id="secPedido" style="display:none">
+            <h2 style="color:#ffc700;">Seu Pedido</h2>
+            <div id="pedidoLista" class="pedido-lista"></div>
+            <div id="pedidoTotal" class="pedido-total"></div>
+            <form class="pedido-form" onsubmit="enviarPedido(event)">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" maxlength="30" required placeholder="Seu nome">
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" maxlength="70" required placeholder="Rua, número...">
+                <label for="referencia">Ponto de Referência:</label>
+                <input type="text" id="referencia" maxlength="50" placeholder="Ex: Perto da praça">
+                <button type="submit">Enviar Pedido pelo WhatsApp</button>
+            </form>
+        </section>
+        <!-- INFORMAÇÕES -->
+        <section id="secInfo" class="info" style="display:none">
+            <h2>Informações</h2>
+            <p>Funcionamento: <b>16h às 2h</b> (terça a domingo)<br>
+                WhatsApp: <b>(99) 91234-5678</b><br>
+                Endereço: Rua Principal, 123, Centro, Sua Cidade<br>
+                <br>
+                <b>Ambiente familiar, com área kids, música ao vivo e petiscos especiais!</b>
+            </p>
+        </section>
+    </main>
+    <script>
+        // --- PRODUTOS (Divididos por categoria) ---
+        const produtos = [
+            // Bebidas
+            {
+                categoria: "Bebidas",
+                nome: "Chopp Gelado 300ml",
+                preco: 7.50,
+                img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
+                descricao: "Chopp pilsen artesanal, bem gelado, servido no copo especial."
+            },
+            {
+                categoria: "Bebidas",
+                nome: "Caipirinha de Limão",
+                preco: 13.00,
+                img: "https://images.unsplash.com/photo-1514361892635-cebbd1b93614?auto=format&fit=crop&w=600&q=80",
+                descricao: "A tradicional, com cachaça premium, limão fresco e gelo."
+            },
+            {
+                categoria: "Bebidas",
+                nome: "Gin Tônica",
+                preco: 19.00,
+                img: "https://images.unsplash.com/photo-1504674900247-ec1e1d2c0056?auto=format&fit=crop&w=600&q=80",
+                descricao: "Gin importado, água tônica, limão, gelo e zimbro."
+            },
+            // Comidas
+            {
+                categoria: "Comidas",
+                nome: "Porção de Batata Frita",
+                preco: 18.00,
+                img: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=600&q=80",
+                descricao: "Porção crocante de batata frita, serve 2 pessoas."
+            },
+            {
+                categoria: "Comidas",
+                nome: "Burger TOP Angus",
+                preco: 25.90,
+                img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80",
+                descricao: "Hambúrguer de angus, queijo, bacon, maionese caseira, pão brioche."
+            },
+            {
+                categoria: "Comidas",
+                nome: "Escondidinho de Carne",
+                preco: 22.90,
+                img: "https://images.unsplash.com/photo-1458642849426-cfb724f15ef7?auto=format&fit=crop&w=600&q=80",
+                descricao: "Escondidinho cremoso de carne de sol com purê de macaxeira."
+            },
+            // Carnes
+            {
+                categoria: "Carnes",
+                nome: "Picanha na Chapa",
+                preco: 59.00,
+                img: "https://images.unsplash.com/photo-1504674900247-ec1e1d2c0056?auto=format&fit=crop&w=600&q=80",
+                descricao: "Picanha grelhada, acompanha farofa, vinagrete e mandioca."
+            },
+            {
+                categoria: "Carnes",
+                nome: "Costela BBQ",
+                preco: 49.00,
+                img: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=600&q=80",
+                descricao: "Costela suína ao molho barbecue, acompanha fritas."
+            }
+        ];
+
+        // --- PROMOÇÕES (Usam mesma estrutura dos produtos) ---
+        const promocoes = [
+            {
+                categoria: "Promoções",
+                nome: "Combo Happy Hour",
+                precoOriginal: 59.80,
+                preco: 39.90,
+                img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80",
+                descricao: "2 Burgers + 2 Chopes pelo preço especial até as 20h."
+            },
+            {
+                categoria: "Promoções",
+                nome: "Dose Dupla Caipirinha",
+                precoOriginal: 26.00,
+                preco: 13.00,
+                img: "https://images.unsplash.com/photo-1514361892635-cebbd1b93614?auto=format&fit=crop&w=600&q=80",
+                descricao: "2 caipirinhas de limão pelo preço de 1 até 20h."
+            },
+            {
+                categoria: "Promoções",
+                nome: "Whisky em Dobro",
+                precoOriginal: 34.00,
+                preco: 17.00,
+                img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
+                descricao: "Peça 2 doses, pague 1 até 21h!"
+            },
+            {
+                categoria: "Promoções",
+                nome: "Picanha + 2 Chopes",
+                precoOriginal: 74.00,
+                preco: 59.00,
+                img: "https://images.unsplash.com/photo-1504674900247-ec1e1d2c0056?auto=format&fit=crop&w=600&q=80",
+                descricao: "Picanha grelhada + 2 chopes. Só hoje!"
+            }
+        ];
+
+        // ---- PEDIDO ----
+        let pedido = [];
+
+        function showSection(sec) {
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btnCardapio').classList.toggle('active', sec === 'cardapio');
+            document.getElementById('btnPromos').classList.toggle('active', sec === 'promos');
+            document.getElementById('btnPedido').classList.toggle('active', sec === 'pedido');
+            document.getElementById('btnInfo').classList.toggle('active', sec === 'info');
+            document.getElementById('secCardapio').style.display = (sec === 'cardapio') ? "block" : "none";
+            document.getElementById('secPromos').style.display = (sec === 'promos') ? "block" : "none";
+            document.getElementById('secPedido').style.display = (sec === 'pedido') ? "block" : "none";
+            document.getElementById('secInfo').style.display = (sec === 'info') ? "block" : "none";
+            if (sec === 'cardapio') renderCardapio();
+            if (sec === 'promos') renderPromos();
+            if (sec === 'pedido') renderPedido();
+        }
+
+        function renderCardapio() {
+            let cats = [...new Set(produtos.map(p => p.categoria))];
+            let html = "";
+            cats.forEach(cat => {
+                let items = produtos.filter(p => p.categoria === cat);
+                html += `<div class="categoria-titulo">${cat}</div><div class="grid">`;
+                items.forEach((p, i) => {
+                    html += `
+            <div class="card">
+              <img src="${p.img}" alt="${p.nome}">
+              <div class="nome">${p.nome}</div>
+              <div class="preco">R$ ${p.preco.toFixed(2)}</div>
+              <div class="descricao">${p.descricao}</div>
+              <button onclick="addPedidoProduto('${cat}', ${i})">Adicionar ao Pedido</button>
+            </div>
+          `;
+                });
+                html += `</div>`;
+            });
+            document.getElementById('secCardapio').innerHTML = html;
+        }
+
+        function renderPromos() {
+            let html = `<div class="categoria-titulo">Promoções Especiais</div><div class="grid">`;
+            promocoes.forEach((p, i) => {
+                html += `
+          <div class="card">
+            <img src="${p.img}" alt="${p.nome}">
+            <div class="nome">${p.nome}</div>
+            <div class="preco">
+              <span class="preco-original">R$ ${p.precoOriginal.toFixed(2)}</span> 
+              R$ ${p.preco.toFixed(2)}
+            </div>
+            <div class="descricao">${p.descricao}</div>
+            <button onclick="addPedidoPromocao(${i})">Adicionar ao Pedido</button>
+          </div>
+        `;
+            });
+            html += `</div>`;
+            document.getElementById('secPromos').innerHTML = html;
+        }
+
+        // Adiciona produto do cardápio
+        function addPedidoProduto(cat, idx) {
+            // Busca pelo nome, independente da categoria
+            const prod = produtos.filter(p => p.categoria === cat)[idx];
+            let found = pedido.find(item => item.nome === prod.nome && !item.promocao);
+            if (found) {
+                found.qtd++;
+            } else {
+                pedido.push({ ...prod, qtd: 1, promocao: false });
+            }
+            alert(`${prod.nome} adicionado ao pedido!`);
+        }
+        // Adiciona produto da promoção
+        function addPedidoPromocao(idx) {
+            const p = promocoes[idx];
+            let found = pedido.find(item => item.nome === p.nome && item.promocao);
+            if (found) {
+                found.qtd++;
+            } else {
+                pedido.push({
+                    nome: p.nome,
+                    preco: p.preco,
+                    img: p.img,
+                    descricao: p.descricao,
+                    qtd: 1,
+                    promocao: true,
+                    precoOriginal: p.precoOriginal
+                });
+            }
+            alert(`${p.nome} adicionado ao pedido!`);
+        }
+
+        function removePedido(index) {
+            pedido.splice(index, 1);
+            renderPedido();
+        }
+
+        function renderPedido() {
+            let html = "";
+            let total = 0;
+            pedido.forEach((item, i) => {
+                total += item.preco * item.qtd;
+                html += `
+          <div class="pedido-item">
+            <span>${item.nome} x${item.qtd} <b>R$${(item.preco * item.qtd).toFixed(2)}</b></span>
+            <button class="remove" onclick="removePedido(${i})">Remover</button>
+          </div>
+        `;
+            });
+            if (pedido.length == 0) html = "<p style='color:#ccc;'>Seu pedido está vazio!</p>";
+            document.getElementById('pedidoLista').innerHTML = html;
+            document.getElementById('pedidoTotal').innerHTML = pedido.length > 0 ? "Total: R$ " + total.toFixed(2) : "";
+        }
+
+        function enviarPedido(e) {
+            e.preventDefault();
+            if (pedido.length == 0) {
+                alert("Adicione ao menos 1 item ao pedido!");
+                return;
+            }
+            let nome = document.getElementById('nome').value.trim();
+            let endereco = document.getElementById('endereco').value.trim();
+            let ref = document.getElementById('referencia').value.trim();
+            let texto = `🍻 *Pedido do Bar TOP* 🍻%0A--------------------%0A`;
+            pedido.forEach(item => {
+                let nomeProduto = item.promocao ? `PROMO: ${item.nome}` : item.nome;
+                texto += `*${nomeProduto}* x${item.qtd} = R$${(item.preco * item.qtd).toFixed(2)}%0A`;
+            });
+            texto += `--------------------%0A*Total*: R$${pedido.reduce((t, i) => t + i.preco * i.qtd, 0).toFixed(2)}%0A`;
+            texto += `--------------------%0A*Cliente*: ${nome}%0A*Endereço*: ${endereco}%0A`;
+            if (ref) texto += `*Referência*: ${ref}%0A`;
+            let fone = "5599912345678"; // Edite para o seu WhatsApp com DDD!
+            window.open(`https://wa.me/${fone}?text=${texto}`, '_blank');
+        }
+
+        // Inicializa ao abrir
+        renderCardapio();
+        showSection('cardapio');
+    </script>
+</body>
+
+</html>
